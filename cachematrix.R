@@ -10,7 +10,7 @@
 makeCacheMatrix <- function(x = matrix()) {
   inv <- NULL
   
-  # Sets a new value for the wrapped matrix
+  # Sets y as the new value for the wrapped matrix
   set <- function(y) {
     x <<- y
     inv <<- NULL
@@ -31,6 +31,7 @@ makeCacheMatrix <- function(x = matrix()) {
     inv
   }
   
+  # Returns a list containing the functions to set/get the matrix and set/get the matrix's inverse
   list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
 }
 
@@ -46,15 +47,21 @@ makeCacheMatrix <- function(x = matrix()) {
 #   The inverse of the matrix m 
 
 cacheSolve <- function(x, ...) {
+  # Get the cached value of the inverse
   inv <- x$getinverse()
   
+  # has the inverse already been cached ? 
   if (!is.null(inv)) {
     message("getting cached data")
   } else {
+    # Compute inverse value
     data <- x$get()
     inv <- solve(data, ...)
+    
+    # Cache inverse
     x$setinverse(inv)
   }
   
+  # Return inverse value
   return (inv)
 }
